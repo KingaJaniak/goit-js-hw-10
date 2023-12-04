@@ -1,28 +1,21 @@
 import axios from 'axios';
-import Notiflix from 'notiflix'; 
-
-axios.defaults.headers.common['x-api-key'] =
-  'live_0FP0Gszjw60zLKpHJ6bbQC8H0Yy15Gvh0VAj9K1BfL5ZXQgt0yOjUvqbBgMTYNLW';
-axios.defaults.baseURL = 'https://api.thecatapi.com/v1';
+import Notiflix from 'notiflix';
+import { fetchBreeds, fetchCatByBreed } from './cat-api'; 
 
 const breedSelect = document.querySelector('.breed-select');
 const loader = document.querySelector('.loader');
 const catInfo = document.querySelector('.cat-info');
 
-// Hide elements 
+// hide elements
 hideElement(loader);
 hideElement(catInfo);
-function fetchBreeds() {
-    return axios.get('/breeds').then(({ data }) => data);
-  }
-  
-  function fetchCatByBreed(breedID) {
-    return axios.get(`/images/search?breed_ids=${breedID}`).then(({ data }) => data);
-  }
 
 fetchBreeds().then(data => {
   const html = data.map(breed => `<option value="${breed.id}">${breed.name}</option>`).join('');
   breedSelect.innerHTML = html;
+
+  // hide loader
+  hideElement(loader);
 });
 
 breedSelect.addEventListener('change', handleBreedSelectChange);
@@ -30,15 +23,15 @@ breedSelect.addEventListener('change', handleBreedSelectChange);
 function handleBreedSelectChange() {
   const selectedBreedId = breedSelect.value;
 
-  // Reset
+  // reset
   resetUIElements();
 
-  // Show loader
+  // show loader
   showElement(loader);
 
   fetchCatByBreed(selectedBreedId)
     .then(catData => {
-      // Show cat info
+      // show cat info
       showElement(catInfo);
 
       const { url, breeds } = catData[0];
@@ -52,11 +45,11 @@ function handleBreedSelectChange() {
       `;
     })
     .catch(error => {
-      // Handle error
+      // handle error
       handleRequestError(error);
     })
     .finally(() => {
-      // Hide loader
+      // hide loader 
       hideElement(loader);
     });
 }
