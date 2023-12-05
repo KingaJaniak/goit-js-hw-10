@@ -29,6 +29,8 @@ function showLoader() {
   showElement(loader);
   hideElement(catInfo);
   hideElement(breedSelect);
+  hideElement(document.querySelector('.breed-select'));
+  showElement(document.querySelector('.loader'));
   setTimeout(()=>{
     resolve()}, 500);
   });
@@ -37,6 +39,8 @@ function hideLoader() {
   hideElement(loader);
   showElement(catInfo);
   showElement(breedSelect);
+  showElement(document.querySelector('.breed-select'));
+  hideElement(document.querySelector('.loader'));
 };
 
 function handleBreedSelectChange() {
